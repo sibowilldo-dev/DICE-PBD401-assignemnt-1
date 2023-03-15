@@ -1,17 +1,26 @@
-import requests
-import json
+from flask import Flask, render_template
+from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker
-from models import appl
+from sqlalchemy.ext.declarative import declarative_base
 
-# Set the API endpoint for the job feed
-job_feed_url = "https://example.com/api/job_feed"
+from backend.database.models import Vacancy
+from database import models
 
-# Make a request to the job feed API and parse the response as JSON
-response = requests.get(job_feed_url)
-job_feed = json.loads(response.content)
+app = Flask(__name__)
 
-# Iterate over the job listings and print their titles and descriptions
-for job in job_feed:
-    print("Job title:", job["title"])
-    print("Job description:", job["description"])
-    print()
+# replace the database_url with your database URL
+engine = create_engine('sqlite:///database.db', echo=True)
+
+Base = declarative_base()
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+@app.route('/')
+def index():
+    # query for active vacancies ordered by created_at descending
+    active_vacancies = session.query(Vacancy).filter_by(status='active').order_by(Vacancy.created_at.desc()).all()
+    return render_template('index.html', vacancies=active_vacancies)
+
+if __name__ == '__main__':
+    app.run(debug=True)
