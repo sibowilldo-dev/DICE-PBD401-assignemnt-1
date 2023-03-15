@@ -12,6 +12,7 @@ app.config['AUTH0_CALLBACK_URL'] = 'http://localhost:5000/callback'
 
 db.init_app(app)
 
+
 oauth = OAuth(app)
 auth0 = oauth.register(
     'auth0',
