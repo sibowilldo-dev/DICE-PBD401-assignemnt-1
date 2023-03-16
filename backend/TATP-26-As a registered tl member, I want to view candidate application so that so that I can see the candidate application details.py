@@ -10,6 +10,7 @@ engine = create_engine('sqlite:///application.db')
 Session = sessionmaker(bind=engine)
 
 
+# H
 # create a function to retrieve the applicant details
 def get_applicant_details(applicant_id1):
     # create a session object
