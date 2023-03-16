@@ -22,6 +22,7 @@ class User(Base):
 # create session
 session = Session()
 
+
 class UpdateUser:
     def __init__(self):
         self.user_id = input("Enter user id: ")
